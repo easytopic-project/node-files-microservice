@@ -1,2 +1,5 @@
 
-export const PORT = process.env.PORT || 3000
+export const {
+    PORT =  3000,
+    FILES_PATH = '/files'
+} = process.env
