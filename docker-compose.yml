@@ -1,0 +1,10 @@
+# Example usage
+
+version: "3.3"
+services:
+  node-files:
+    build: . 
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./temp:/files

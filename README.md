@@ -12,6 +12,8 @@ npm start
 
 You can also run `npm run dev` for development mode.
 
+Alternatively, you can use the Docker version. To start an quick server just run `docker-compose up`
+
 You need to pass as an ENV settings the following (check [src/env.js](src/env.js)): 
 
 - `FILES_PATH`: Directory where the files will be stored. Default: `/files`
