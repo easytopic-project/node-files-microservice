@@ -25,25 +25,25 @@ app.all('/', (req, res) => res.send('API ROOT'))
 /**
  * Register files, passed by POST. Allow multiple files.
  */
-app.post('/files', uploadMiddleware, async ({ files }, res) =>
-    files ?
-        Promise.all(
-            Object.keys(files).map(
-                async f => {
-                    const file = files[f], { size, mimetype, md5 } = file
-                    const name = `${(new Date()).getTime()}.${extension(mimetype)}`
-                    await file.mv(`${FILES_PATH}/${name}`)
-                    return [f, { name, size, mimetype, md5 }]
-                }
-            )
-        )
-            .then(files => res.send(
-                files.reduce(
-                    (files, [field, file]) => ({ ...files, [field]: file })
-                    , {})
-            ))
-            .catch(error => console.error(error) || res.status(500).send({ error }))
-        : res.status(422).send({error: "no files received"})
+app.post('/files', uploadMiddleware, ({ files }, res) => {
+    if (!files)
+        res.status(422).send({ error: "no files received" })
+
+    Promise.all(Object.keys(files).map(
+        async f => {
+            const file = files[f], { size, mimetype, md5 } = file
+            const name = `${(new Date()).getTime()}.${extension(mimetype)}`
+            await file.mv(`${FILES_PATH}/${name}`)
+            return [f, { name, size, mimetype, md5 }]
+        }
+    )).then(files => res.send(
+        files.reduce(
+            (files, [field, file]) => ({ ...files, [field]: file })
+            , {})
+    ))
+        .catch(error => console.error(error) || res.status(500).send({ error }))
+
+}
 )
 /**
  * Delete registered file
